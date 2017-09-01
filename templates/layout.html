@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->
+  <meta charset="utf-8" />
+  <meta content="initial-scale=1, width=device-width" name="viewport" />
+  <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
+  
+  <link rel="stylesheet" href="/static/css/bootstrap-paper.min.css">
+  <script src="/static/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="/static/css/toastr.css" rel="stylesheet"/>
+  <script src="/static/js/toastr.min.js"></script>
+  
+  <script src="/static/js/jquery.min.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.css"/>
+  <script src="/static/js/jquery-ui.js"></script>
+  
+  <title>{% block title %}{% endblock %} | Chanakya</title>
+  {% block head %} {% endblock %}
+  <style>
+  .table {
+    max-width: none;
+    table-layout: fixed;
+    word-wrap: break-word;
+    }
+    /*  body {background-color: #e6e6e6;}*/
+  </style>
+  <script>
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "slideDown",
+        "hideMethod": "slideUp"
+      }
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Hello World!</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Nested Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="" target="_blank">Item 1</a></li>
+              <li><a href="" target="_blank">Item 2</a></li>
+              <li class="divider">Create Ledger</li>
+              <li><a href="" target="_blank">Item 3</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Some Link</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+    <header>
+      {% for category, message in messages %}
+      <script>
+        toastr["{{category}}"](" ", "{{message}}")
+      </script>
+      {% endfor %}
+    </header>
+    {% endif %} {% endwith %}
+    <main>
+      {% block main %} {% endblock %}
+    </main>
+
+    <!-- Modal -->
+    <div id="message" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="modal_head">Chanakya</h4>
+          </div>
+          <div class="modal-body" id="modal_body">
+            <p>Some Content</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Modal -->
+  </div>
+</body>
+</html>
