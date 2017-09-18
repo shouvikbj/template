@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block title %}GSTR1{% endblock %}
+{% block main %}
+  <div class="row">
+    <div class="jumbotron">
+      <form action="" method="post">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <select name="month" class="form-control" required>
+              <option value="">Select Month</option>
+              <option value="Jul">Jul</option>
+              <option value="Aug">Aug</option>
+              <option value="Sep">Sep</option>
+              <option value="Oct">Oct</option>
+              <option value="Nov">Nov</option>
+              <option value="Dec">Dec</option>
+              <option value="Jan">Jan</option>
+              <option value="Feb">Feb</option>
+              <option value="Mar">Mar</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <table class="table">
+            <thead>
+              <td>Annexure</td>
+              <td>Description</td>
+              <td>Select</td>
+            </thead>
+            <tbody>
+              <tr>
+                <td>B2B</td>
+                <td>Details of invoices of Taxable supplies made to other <b>registered</b> taxpayers</td>
+                <td><input type="radio" name="category" value="b2b"></td>
+              </tr>
+              <tr>
+                <td>B2C Large</td>
+                <td>Invoices for Taxable outward supplies to consumers where <br>
+                  a)The place of supply is <b>outside</b> the state where the supplier is <b>unregistered and</b> <br>
+                  b)The total invoice value is <b>more</b> that Rs 2,50,000</td>
+                <td><input type="radio" name="category" value="b2cl"></td>
+              </tr>
+              <tr>
+                <td>B2C Small</td>
+                <td>Supplies made to consumers and <b>unregistered</b> persons of the following nature <br>
+                  a) Intra-State: <b>any</b> value <br>
+                  b) Inter-State: Invoice value Rs 2.5 lakh or <b>less</b></td>
+                <td><input type="radio" name="category" value="b2cs"></td>
+              </tr>
+              <tr id="gstr3">
+                <td>GSTR 3</td>
+                <td>Monthly summary return</td>
+                <td><input type="radio" name="category" value="r3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">View</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "layout.html" %} {% block main %}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-sm-12">
+              <h4>Search</h4>
+              <hr>
+              <h5>Stock Items</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <input type="text" id="search" oninput="suggest(this.value)" autocomplete="off" class="form-control" placeholder="Stock Item Name" autofocus>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="suggest"></div>
+        </div>
+      </div>
+      <div class="col-sm-4" id="viewledger"></div>
+    </div>
+  </div>
+</div>
+<script>
+  function suggest(data) {
+    if(data ==  "") {
+      document.getElementById('suggest').innerHTML = ""
+      toastr["warning"]("You need to select atleast one item","Empty Value")
+      return
+    }
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function() {
+      if (xh.status == 200 && xh.readyState == 4)
+        viewresponse(JSON.parse(xh.response))
+    };
+    xh.open("GET", "/master/inventory/stock/getitems/" + data);
+    xh.send();
+  }
+
+  function viewresponse(data) {
+    //console.log(data);
+    innerHTML = "<ul class=\"list-group\">";
+    data.forEach(function(elem) {
+      innerHTML += "<a href=\"#\" class=\"list-group-item\" onclick=\"showvalue('" + elem["id"] + "','" + elem["stock_item_group"] + "','" + elem["stock_item_hsn"] + "','" + elem["stock_item_name"] + "','" + elem["stock_item_taxrate"] + "','" +
+        elem["stock_item_uom"] + "')\">" + elem["stock_item_name"] + "<span class=\"badge\">" + elem["stock_item_group"] + "</span></a>"
+    });
+    innerHTML += "</ul>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+
+  function showvalue(id, group_name, hsn, item_name, taxrate, uom) {
+    document.getElementById('search').value = group_name;
+    document.getElementById('suggest').innerHTML = ""
+    var data = "<div class=\"jumbotron\">"
+    data += "<h4>" + item_name + "<span class=\"badge\">" + group_name + "</span></h4>"
+    data += "<p>HSN: " + hsn + "</p>"
+    data += "<p>GST: " + taxrate + "%</p>"
+    data += "<p>Unit of Measure: " + uom + "</p>"
+    data += "<a href=\"/master/inventory/edit/stock/item/" + id + "\" class=\"btn btn-primary\">Edit/Delete</a>"
+    data += "</div>"
+    data += "</div>"
+    document.getElementById('viewledger').innerHTML = data;
+  }
+</script>
+{% endblock %}

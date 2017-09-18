@@ -1,0 +1,316 @@
+{% extends "layout.html" %}
+{% block title %}Sales Voucher{% endblock %}
+{% block main %}
+<div class="row">
+
+  <form class="form" action="" method="post" onsubmit="return check_date();">
+
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="alert alert-info">Sales Voucher</div>
+        </div>
+        <div class="col-sm-5"></div>
+          <div class="col-sm-2">
+            <div class="form-group">
+              <input type="text" class="datepicker" value="{{date}}" readonly name="date" style="width:80px" placeholder="Date">
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <input type="text" class="form-control" name="sino" required autocomplete="off" placeholder="Invoice No">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <input type="text" class="form-control" autocomplete="off" oninput="show_modal();suggestac(this.value,this)" name="partyacname" placeholder="Purchaser Name" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+                <select class="form-control" name="pos" id="place_of_supply" required>
+                  	<option value="">Place of Supply</option><option  value="35">35-Andaman and Nicobar Islands</option>
+										<option  value="37">37-Andhra Pradesh</option><option  value="12">12-Arunachal Pradesh</option>
+                    <option  value="18">18-Assam</option><option  value="10">10-Bihar</option>
+                    <option  value="04">04-Chandigarh</option><option  value="22">22-Chhattisgarh</option>
+                    <option  value="26">26-Dadra and Nagar Haveli</option><option  value="25">25-Daman and Diu</option>
+                    <option  value="07">07-Delhi</option><option  value="30">30-Goa</option>
+                    <option  value="24">24-Gujarat</option><option  value="06">06-Haryana</option>
+                    <option  value="02">02-Himachal Pradesh</option><option  value="01">01-Jammu and Kashmir</option>
+                    <option  value="20">20-Jharkhand</option><option  value="29">29-Karnataka</option>
+                    <option  value="32">32-Kerala</option><option  value="31">31-Lakshadweep</option>
+                    <option  value="23">23-Madhya Pradesh</option><option  value="27">27-Maharashtra</option>
+                    <option  value="14">14-Manipur</option><option  value="17">17-Meghalaya</option>
+                    <option  value="15">15-Mizoram</option><option  value="13">13-Nagaland</option>
+                    <option  value="21">21-Odisha</option><option  value="34">34-Puducherry</option>
+                    <option  value="03">03-Punjab</option><option  value="08">08-Rajasthan</option>
+                    <option  value="11">11-Sikkim</option><option  value="33">33-Tamil Nadu</option>
+                    <option  value="36">36-Telangana</option><option  value="16">16-Tripura</option>
+                    <option  value="09">09-Uttar Pradesh</option><option  value="05">05-Uttarakhand</option>
+                    <option  value="97">97-Other Territory</option><option  value="19">19-West Bengal</option>
+								</select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <input type="hidden" class="form-control" autocomplete="off" oninput="show_modal();suggestac(this.value,this)" name="saleacname" value="Sales Acc" placeholder="Sales A/C Name" style="width:400px;" required>
+          </div>
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-sm-12" style="overflow-x: scroll;">
+          <table class="table table-striped table-bordered" id="table">
+            <thead>
+              <th style="width:120px;">Item Name</th>
+              <th style="width:80px;">HSN</th>
+              <th style="width:80px;">Quantity</th>
+              <th style="width:80px;">Rate</th>
+              <th style="width:70px;">Discount</th>
+              <th style="width:120px;">Amount</th>
+              <th style="width:50px;">GST@</th>
+              <th style="width:100px;">Tax</th>
+              <th style="width:120px;">Amount With Tax</th>
+              <th style="width:70px;">Delete</th>
+            </thead>
+            <tbody id="table_tbody">
+              <tr>
+                <input type="hidden" name="itm_id" value="">
+                <td><input type="text" required autocomplete="off" value="" name="itm_name" oninput="show_modal();suggestitm(this.value,this)" class="form-control" placeholder="Item Name"></td>
+                <td><input type="text" value="" class="form-control" disabled></td>
+                <td><input type="text" required value="" autocomplete="off" name="qty" class="form-control"></td>
+                <td><input type="text" required value="" autocomplete="off" name="rate" class="form-control"></td>
+                <td><input type="text" required value="" autocomplete="off" name="discount" class="form-control"></td>
+                <td><input type="text" required value="" name="amount" class="form-control"></td>
+                <td><input type="text" value="" class="form-control" disabled></td>
+                <td><input type="text" value="" class="form-control" disabled></td>
+                <td><input type="text" value="" class="form-control" disabled></td>
+                <td><input type="checkbox" value="1"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><button type="button" class="btn btn-primary" onclick="addrows()"><span class="glyphicon glyphicon-plus"></span></button></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total:</td>
+                <td><h5 id="total_amount_p"></h5></td>
+                <td></td>
+                <td><h5 id="total_tax_p"></h5></td>
+                <td><h5 id="total_amount_wth_tax_p"></h5></td>
+                <td><button type="button" class="btn btn-danger" onclick="deleterows(9)"><span class="glyphicon glyphicon-trash"></span></button></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><p>Round Off</p></td>
+                <td><input type="text" name="roundoff" id="roundoff" class="form-control" style="width:80px;" value="0.00"></td>
+                <td></td>
+                <td></td>
+                <td><h5 id="final_amount"></h5></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10">
+          <div class="form-group">
+            <textarea name="narration" rows="2" cols="80" class="form-control" placeholder="Narration"></textarea>
+          </div>
+        </div>
+        <div class="col-sm-1">
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  function check_date() {
+    if(document.getElementsByName('date')[0].value == "") {
+      toastr["error"]("Invoice date not given","Date Not Set")
+      return false
+    }
+    return true
+  }
+  function show_modal(){
+    $("#message").modal();
+    document.getElementById('modal_head').innerHTML = "Suggestions";
+    document.getElementById('modal_body').innerHTML = "<div id=\"suggest\"></div>";
+  }
+  function calculate(){
+    //console.log("calculate");
+    var total_amountv = 0.00;
+    var total_taxv = 0.00;
+    var rows = document.getElementById('table_tbody').children
+    for(var i = 0; i < rows.length;i++){
+      columns=rows[i].getElementsByTagName('input');
+
+      var qty = ((columns[3].value) != NaN?(columns[3].value):0)
+      var rate = ((columns[4].value) != NaN?(columns[4].value):0)
+
+      if(columns[5].value[(columns[5].value).length-1] == "%"){
+        var d_rate = parseFloat((columns[5].value.split("")).splice(0,(columns[5].value).length-1).join(""))
+        var discount = ((qty)*(rate)*d_rate)/100;
+        //console.log(discount,rate);
+        columns[5].value = discount;
+      }
+      else if(isNaN(columns[5].value)){
+        columns[5].value = 0;
+        var discount = 0;
+      }
+      else{
+        var discount = parseFloat(columns[5].value);
+        //console.log(typeof(discount));
+      }
+
+      var amount = parseFloat(qty*rate - discount).toFixed(2)
+      if(amount < 0){
+        toastr["error"]("Your Total Amount is Negative","Negative")
+        columns[5].value = 0
+        //return;
+      }
+      //console.log("Qty:",qty,"Rate:",rate,"Disc",discount);
+      var tax = parseFloat((amount * columns[7].value)/100).toFixed(2)
+      //console.log( columns[7].value);
+      //console.log(qty,rate,discount,amount,tax)
+
+      if(!isNaN(amount)){
+          columns[6].value = amount
+          total_amountv = parseFloat(total_amountv) + parseFloat(amount)
+          columns[8].value = tax
+          total_taxv = parseFloat(total_taxv) + parseFloat(tax)
+          columns[9].value = parseFloat(parseFloat(amount)+parseFloat(tax)).toFixed(2);
+      }
+      else{
+        columns[6].value = "";
+        columns[8].value = "";
+        columns[9].value = "";
+      }
+    }
+    var roundoff =   parseFloat(document.getElementById("roundoff").value)
+
+    document.getElementById('total_amount_p').innerHTML = parseFloat(total_amountv).toFixed(2)
+    document.getElementById('total_tax_p').innerHTML = parseFloat(total_taxv).toFixed(2)
+    //console.log(total_taxv);
+    document.getElementById('total_amount_wth_tax_p').innerHTML = parseFloat(parseFloat(total_amountv) + parseFloat(total_taxv)).toFixed(2)
+    document.getElementById('final_amount').innerHTML = parseFloat(parseFloat(total_amountv) + parseFloat(total_taxv) + roundoff).toFixed(2)
+    setTimeout(calculate,250)
+  }
+  calculate()
+
+  function deleterows(posCheckBox){
+    var elem = document.getElementById('table_tbody');
+    for(var i = 0; i < elem.childElementCount;i++){
+      if(elem.children[i].children[posCheckBox].children[0].checked){
+        console.log(i);
+        elem.deleteRow(i);
+        deleterows(9)
+      }
+    }
+  }
+  var last_input_elem = undefined
+  function addrows(){
+      var table = document.getElementById("table_tbody")
+      var row = table.insertRow(-1);
+      row.insertCell(0).innerHTML =   "<input type=\"hidden\" name=\"itm_id\" value=\"\">"+"<input type=\"text\" autocomplete=\"off\" value=\"\" name=\"itm_name\" required oninput=\"show_modal();suggestitm(this.value,this)\"class=\"form-control\">"
+      row.insertCell(1).innerHTML =   "<input type=\"text\" value=\"\" class=\"form-control\" disabled>"
+      row.insertCell(2).innerHTML =   "<input type=\"text\" value=\"\" required autocomplete=\"off\" name=\"qty\" class=\"form-control\">"
+      row.insertCell(3).innerHTML =   "<input type=\"text\" value=\"\" required autocomplete=\"off\" name=\"rate\" class=\"form-control\">"
+      row.insertCell(4).innerHTML =   "<input type=\"text\" value=\"\" required autocomplete=\"off\" name=\"discount\" class=\"form-control\">"
+      row.insertCell(5).innerHTML =   "<input type=\"text\" value=\"\" required name=\"amount\" class=\"form-control\">"
+      row.insertCell(6).innerHTML =   "<input type=\"text\" value=\"\" class=\"form-control\" disabled>"
+      row.insertCell(7).innerHTML =   "<input type=\"text\" value=\"\" class=\"form-control\" disabled>"
+      row.insertCell(8).innerHTML =   "<input type=\"text\" value=\"\" class=\"form-control\" disabled>"
+      row.insertCell(9).innerHTML =   "<input type=\"checkbox\" value=\"1\">"
+      calculate()
+  }
+  function suggestac(data,elem){
+    last_input_elem = elem
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function(){
+      if(xh.status == 200 && xh.readyState == 4)
+      viewresponse(JSON.parse(xh.response),elem)
+    };
+    xh.open("GET","/master/ledger/getledgers/byname/"+data);
+    xh.send();
+  }
+  function suggestitm(data,elem){
+    last_input_elem = elem
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function(){
+      if(xh.status == 200 && xh.readyState == 4)
+      viewresponseitm(JSON.parse(xh.response))
+    };
+    xh.open("GET","/master/inventory/stock/getitems/"+data);
+    xh.send();
+  }
+  function viewresponse(data){
+    //console.log(data);
+    innerHTML = "<div class=\"list-group\">";
+    data.forEach(function(elem){
+      innerHTML += "<a href=\"#\" class=\"list-group-item\" onclick=\"update_ledger_name('"+elem["ledger_name"]+"','"+elem["gstin"]+"')\"><p>"+elem["ledger_name"]
+      innerHTML += "<span class=\"badge\" >"+elem["ledger_group"]+"</span>"
+      innerHTML += "</p></a>"
+
+    });
+    innerHTML += "</div>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+  function viewresponseitm(data){
+    //console.log(data);
+    innerHTML = "<div class=\"list-group\">";
+    data.forEach(function(elem){
+      innerHTML += "<a href=\"#\" class=\"list-group-item\""
+      innerHTML += " onclick=\"update_item_name('"+elem["id"]+"','"+elem["stock_item_name"]+"','"+elem["stock_item_hsn"]+"','"+elem["stock_item_taxrate"]+"','"+elem["rate"]
+      innerHTML += "')\"><p>"+elem["stock_item_name"]
+      innerHTML += "<br><span class=\"label label-primary\" >"+elem["stock_item_group"]+"</span>"
+      innerHTML += "<br><span class=\"badge\" >"+elem["stock_item_taxrate"]+"%</span>"
+      innerHTML += "</p></a>"
+    });
+    innerHTML += "</div>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+  function update_item_name(id,name,hsn,taxrate,rate){
+    row = last_input_elem.parentElement.parentElement;
+    columns = row.getElementsByTagName('input')
+    columns[0].value = id;
+    columns[1].value = name;
+    columns[2].value = hsn
+    columns[4].value = rate
+    columns[7].value = taxrate;
+    document.getElementById('suggest').innerHTML = "";
+    $("#message").modal('hide');
+  }
+  function update_ledger_name(name,gstin){
+    last_input_elem.value = name;
+    document.getElementById('suggest').innerHTML = "";
+    $("#message").modal('hide');
+    if (gstin == "null") {
+        document.getElementById("place_of_supply").value = "19"
+    }
+    else if(gstin != ""){
+      document.getElementById("place_of_supply").value = gstin[0]+gstin[1]
+      console.log( gstin[0]+gstin[1]);
+    }
+    else{
+      document.getElementById("place_of_supply").value = "";
+    }
+
+  }
+
+</script>
+
+{% endblock %}

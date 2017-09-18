@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block title %}Display Ledger{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="jumbotron">
+          <div class="row">
+            <h4>Search</h4>
+            <hr>
+            <h5>Ledger</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="jumbotron">
+          <div class="row">
+              <div class="form-group">
+                <input type="text" id="search" oninput="suggest(this.value)" autocomplete="off" class="form-control" placeholder="Ledger Name" autofocus>
+              </div>
+          </div>
+          <div class="row" id="suggest"></div>
+        </div>
+      </div>
+      <div class="col-sm-4" id="viewledger"></div>
+    </div>
+  </div>
+</div>
+<script>
+  function suggest(data){
+    if(data ==  "") {
+      document.getElementById('suggest').innerHTML = ""
+      toastr["warning"]("You need to select atleast one item","Empty Value")
+      return
+    }
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function(){
+      if(xh.status == 200 && xh.readyState == 4)
+      viewresponse(JSON.parse(xh.response))
+    };
+    xh.open("GET","/master/ledger/getledgers/byname/"+data);
+    xh.send();
+  }
+  function viewresponse(data){
+    //console.log(data);
+    innerHTML = "<ul class=\"list-group\">";
+    data.forEach(function(elem){
+      innerHTML += "<a href=\"#\" class=\"list-group-item\" onclick=\"showvalue('"+elem["ledger_name"]+"','"+elem["ledger_group"]+"','"+elem["opening_balance"]+"','"+elem["gstin"]+"','"+elem["address"]+"','"+elem["id"]+"')\">"+elem["ledger_name"]+"<span class=\"badge\">"+elem["ledger_group"]+"</span></a>"
+    });
+    innerHTML += "</ul>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+  function showvalue(ledger_name,ledger_group,opening_balance,gstin,address,id){
+    document.getElementById('search').value = ledger_name;
+    document.getElementById('suggest').innerHTML = ""
+    var data = "<div class=\"jumbotron\">"
+    data += "<h4>"+ledger_name+"</h4>"
+    data += "<span class=\"badge\">"+ledger_group+"</span>"
+    data += "<p>"+gstin+"</p>"
+    data += "<p>"+address+"</p>"
+    data += "Opening Balance:"+opening_balance+""
+    data += "<div class=\"modal-footer\">"
+    data += "<a href=\"/master/ledger/edit/"+id+"\" class=\"btn btn-primary\">Edit/Delete</a>"
+    data += "</div>"
+    data += "</div>"
+    document.getElementById('viewledger').innerHTML = data;
+  }
+
+</script>
+{% endblock %}

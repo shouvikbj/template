@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}
+Dashboard
+{% endblock %}
+{% block navheader %}
+  {{company_name}}
+{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="col-sm-6">
+    <h1>{{ company.company_name }}</h1>
+    <h3>{{ company.company_gstin }}</h3>
+    <hr>
+    <h2>FY 201617</h2>
+    <hr>
+    <h3>{{ company.company_address }}</h3>
+  </div>
+  <div class="col-sm-6 jumbotron">
+    <div class="row">
+      <div class="col-sm-12">
+
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

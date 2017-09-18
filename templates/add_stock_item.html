@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Stock Item{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="col-sm-12">
+    <form class="" action="" method="post">
+      <div class="col-sm-9">
+        <div class="row">
+          <div class="alert alert-success col-sm-3">Add Stock Item</div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <input type="text" class="form-control" name="stock_name" placeholder="Item Name" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <input type="text" placeholder="Item Rate" name="rate" autocomplete="off" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <input type="text" placeholder="Under Group" name="under_group" id="under_group" autocomplete="off" required oninput="suggest(this.value)" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <select class="form-control" name="units_om" id="uom" required>
+                <option  value="">Units of Measure</option>
+                <option  value="boxes" >boxes</option>
+                <option  value="cm" >cm</option>
+                <option  value="crates" >crates</option>
+                <option  value="cu mtr" >cu mtr</option>
+                <option  value="gm" >gm</option>
+                <option  value="kg" >kg</option>
+                <option  value="ltr" >ltr</option>
+                <option  value="metric ton" >metric ton</option>
+                <option  value="ml" >ml</option>
+                <option  value="mm" >mm</option>
+                <option  value="mtr" >mtr</option>
+                <option  value="pallets" >pallets</option>
+                <option  value="pieces" >pieces</option>
+                <option  value="pkts" >pkts</option>
+                <option  value="sheets" >sheets</option>
+                <option  value="sq.cm" >sq.cm</option>
+                <option  value="sq.m" >sq.m</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <input type="text" placeholder="HSN Code" name="hsn" id="hsn" class="form-control" autocomplete="off" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <input type="text" placeholder="Tax Rate" name="taxrate" id="trate" autocomplete="off" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <button class="btn btn-success">Submit</button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+<script>
+  function suggest(data){
+    $("#message").modal();
+    document.getElementById('modal_body').innerHTML = "  <div id=\"suggest\"></div>"
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function(){
+      if(xh.status == 200 && xh.readyState == 4)
+      viewresponse(JSON.parse(xh.response))
+    };
+    xh.open("GET","/master/inventory/stock/getgroups/"+data);
+    xh.send();
+  }
+  function viewresponse(data){
+    //console.log(data);
+    innerHTML = "<ul class=\"list-group\">";
+    data.forEach(function(elem){
+      innerHTML += "<a href=\"#\" class=\"list-group-item\" onclick=\"setvalue('"
+      innerHTML += elem["group_name"]+"','"+elem["hsn"]+"','"+elem["taxrate"]+"','"+elem["uom"]+"')\">"+elem["group_name"]+"</a>"
+    });
+    innerHTML += "</ul>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+  function setvalue(data,hsn,taxrate,uom){
+    document.getElementById('under_group').value = data;
+    document.getElementById('hsn').value = hsn;
+    document.getElementById('trate').value = taxrate;
+    document.getElementById('uom').value = uom;
+    document.getElementById('suggest').innerHTML = "";
+    $("#message").modal('hide');
+  }
+
+</script>
+{% endblock %}

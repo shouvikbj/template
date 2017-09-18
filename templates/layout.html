@@ -5,18 +5,13 @@
   <meta charset="utf-8" />
   <meta content="initial-scale=1, width=device-width" name="viewport" />
   <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
-  
+  <script src="/static/js/jquery.min.js"></script>
   <link rel="stylesheet" href="/static/css/bootstrap-paper.min.css">
   <script src="/static/js/bootstrap.min.js"></script>
-  
   <link rel="stylesheet" href="/static/css/toastr.css" rel="stylesheet"/>
   <script src="/static/js/toastr.min.js"></script>
-  
-  <script src="/static/js/jquery.min.js"></script>
-  
   <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.css"/>
   <script src="/static/js/jquery-ui.js"></script>
-  
   <title>{% block title %}{% endblock %} | Chanakya</title>
   {% block head %} {% endblock %}
   <style>
@@ -27,6 +22,21 @@
     }
     /*  body {background-color: #e6e6e6;}*/
   </style>
+  <script>
+    $( function() {
+      $( ".datepicker" ).datepicker({
+        showOn: "button",
+        buttonImage: "/static/calendar.gif",
+        buttonImageOnly: true,
+        buttonText: "Select date",
+        changeMonth: true,
+        changeYear: true,
+        minDate: new Date(2017, 06,01),
+        maxDate: new Date(2018,02,31),
+        dateFormat: "dd-M-y"
+      });
+    });
+  </script>
   <script>
       toastr.options = {
         "closeButton": true,
@@ -55,23 +65,87 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">Hello World!</a>
+        <a class="navbar-brand" href="/">{% if session.company_name %}{{ session.company_name }}{% endif %}{% block navheader %}{% endblock %}</a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          
+          {% if session.company_name %}
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Nested Dropdown <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ledgers <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="" target="_blank">Item 1</a></li>
-              <li><a href="" target="_blank">Item 2</a></li>
-              <li class="divider">Create Ledger</li>
-              <li><a href="" target="_blank">Item 3</a></li>
+              <li><a href="{{ url_for('add_ledger_master',group="None") }}" target="_blank">New Ledger</a></li>
+              <li><a href="/master/ledger/display" target="_blank">Display</a></li>
+        </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/master/inventory/add/stock/item"  target="_blank">New Stock Item</a></li>
+              <li><a href="/master/inventory/display/stock/item"  target="_blank">Display Stocks</a></li>
+              <li class="divider"></li>
+              <li><a href="/master/inventory/add/stock/group"  target="_blank">New Stock Group</a></li>
+              <li><a href="/master/inventory/display/stock/group">Display Groups</a></li>
             </ul>
           </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Voucher <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Purchase</a></li>
+              <li><a href="#">Payment</a></li>
+              <li class="divider"></li>
+              <li><a href="/voucher/sale/add">Sales</a></li>
+              <li><a href="#">Reciept</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Contra</a></li>
+              <li><a href="#">Journal</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Inventory Vouchers</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Display <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Ledger</a></li>
+              <li><a href="#">Cash Book</a></li>
+              <li><a href="#">Bank Book</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Balance Sheet</a></li>
+              <li><a href="#">Profit-Loss</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Month-wise</a></li>
+              <li><a href="#">Quaterly</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">GST <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/gstr1">GSTR-1</a></li>
+              <li><a href="#">GSTR-2</a></li>
+              <li><a href="/gstr1#gstr3">GSTR-3</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Search Company</a></li>
+              <li><a href="#">Search HSN</a></li>
+              <li class="divider"></li>
+            </ul>
+          </li>
+          {% endif %}
+          {% block navleft %} {% endblock %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Some Link</a></li>
+          {% block navright %} {% endblock %}
+          {% if session.company_name %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Edit Details</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+              </li>
+
+          {% else %}
+            <li><a href="/login">Login</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -100,7 +174,10 @@
             <h4 class="modal-title" id="modal_head">Chanakya</h4>
           </div>
           <div class="modal-body" id="modal_body">
-            <p>Some Content</p>
+            <p>By Joydeep Mukherjee</p>
+            <p>Satadal Banerjee</p>
+            <p>Nilmadhab Das</p>
+            <p>Shouvik Bajpayee</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

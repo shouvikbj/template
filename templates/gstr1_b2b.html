@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}GSTR1 B2B{% endblock %}
+{% block main %}
+<div class="row">
+  <table class="table table-stripped">
+    <thead>
+      <th>Name</th>
+      <th>GSTIN</th>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Invoice Value</th>
+      <th>Place of Supply</th>
+      <th>Rate</th>
+      <th>Taxable Value</th>
+    </thead>
+    <tbody>
+      {% for row in data %}
+        <tr>
+
+          <td>{{ row["ledger_name"] }}</td>
+          <td>{{ row["gstin"] }}</td>
+          <td><a href="/voucher/sale/edit/{{row["bill_id"]}}">{{ row["inv_no"] }}</a></td>
+          <td>{{ row["date"] }}-{{ row["month"] }}-20{{ row["year"] }}</td>
+          <td>{{ "%0.2f"%(row["invoice_value"] + row["roundoff"]) }}</td>
+          <td>{{ state_codes[row["place_of_supply"]] }}</td>
+          <td>{{ row["stock_item_taxrate"] }}</td>
+          <td>{{ "{:0.2f}".format(row["amount"]) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  <div class="col-sm-2">
+    <a href="/gstr1/b2b/{{month}}/print"class="btn btn-success">Print CSV</a>
+  </div>
+  <div class="col-sm-8"></div>
+  <div class="col-sm-2">
+    <a href="/gstr1/download/b2b/{{month}}"class="btn btn-info">Download CSV</a>
+  </div>
+</div>
+{% endblock %}

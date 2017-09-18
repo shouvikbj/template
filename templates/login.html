@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}
+Login
+{% endblock %}
+{% block navheader %}
+Login
+{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6 jumbotron">
+      <div class="row">
+        <div class="col-sm-12">
+          <form action="" class="form" method="post">
+            <div class="modal-head">
+              <h3>Welcome To Chanakya</h3>
+              <p>Accounting Software developed by Joydeep, Nilmadhab, Shouvik, Satadal</p>
+              <p>FY 2016-17</p>
+              <hr>
+            </div>
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Enter UserID" name="userid" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Enter Password" name="password" autocomplete="off">
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+            <a href="/register" class="btn btn-primary">Create New Company</a>
+        </div>
+      </div>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
+{% endblock %}

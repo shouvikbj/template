@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="row">
+  <h3>3.1 Details of Outward taxable Supplies</h3>
+</div>
+<table class="table table-stripped">
+  <thead>
+    <td>Nature Of Supplies</td>
+    <td>Total Taxable Value</td>
+    <td>IGST</td>
+    <td>CGST</td>
+    <td>SGST</td>
+    <td>Total GST</td>
+  </thead>
+  <tbody>
+    <tr>
+      <td>        (a) Other Than <br> Zero Rated, Nil Rated, Exempted      </td>
+      <td>        {{"%0.2f" % data["total_taxable_value"]}}      </td>
+      <td>        {{"%0.2f" % data["total_igst"]}}      </td>
+      <td>        {{"%0.2f" % data["total_cgst"]}}      </td>
+      <td>        {{"%0.2f" % data["total_cgst"]}}      </td>
+      <td>        {{"%0.2f" % data["total_tax_value"]}}      </td>
+    </tr>
+    <tr>
+      <td>(b) Zero Rated</td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td>(c) Nil Rated, Exempted </td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td>(d) Inward Supply liable to Reverse Charge</td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td>(e) Non GST Supply</td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}

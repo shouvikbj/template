@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}{{ session.company_name }} GSTR1 B2B {{month}}{% endblock %}
+{% block main %}
+<div class="row">
+  <p>Chanakya - A GST based accounting software developed by Joydeep Mukherjee</p>
+  <h2>{{ session.company_name }}</h2>
+  <h3>GSTR1-B2B-{{month}}</h3>
+  <h5>Details of invoices of Taxable supplies made to other <b>registered</b> taxpayers</h5>
+  <p>Checked & Verified on behalf of {{session.company_name}}</p><br><br>
+  <hr>
+  <table class="table table-stripped">
+    <thead>
+      <th>Name</th>
+      <th>GSTIN</th>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Invoice Value</th>
+      <th>Place of Supply</th>
+      <th>Rate</th>
+      <th>Taxable Value</th>
+      <th>Reverse Charge</th>
+      <th>Invoice Type</th>
+    </thead>
+    <tbody>
+      {% for row in data %}
+        <tr>
+
+          <td>{{ row["ledger_name"] }}</td>
+          <td>{{ row["gstin"] }}</td>
+          <td>{{ row["inv_no"] }}</a></td>
+          <td>{{ row["date"] }}-{{ row["month"] }}-20{{ row["year"] }}</td>
+          <td>{{ "%0.2f"%(row["invoice_value"] + row["roundoff"]) }}</td>
+          <td>{{ state_codes[row["place_of_supply"]] }}</td>
+          <td>{{ row["stock_item_taxrate"] }}</td>
+          <td>{{ row["amount"] }}</td>
+          <td>N.A.</td>
+          <td>Regular</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "layout.html" %} {% block main %}
+<div class="row">
+  <form class="" action="" method="post">
+    <div class="col-sm-9">
+      <div class="row">
+        <div class="alert alert-success col-sm-3">Edit Stock Item</div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <input type="text" class="form-control" name="stock_name" value="{{ data["stock_item_name"] }}" placeholder="Name" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <input type="text" placeholder="Under Group" name="under_group" value="{{ data["stock_item_group"] }}" id="under_group" required oninput="suggest(this.value)" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <select class="form-control" name="units_om" required>
+              <option  value="{{ data["stock_item_uom"] }}">{{ data["stock_item_uom"] }}</option>
+              <option  value="boxes" >boxes</option>
+              <option  value="cm" >cm</option>
+              <option  value="crates" >crates</option>
+              <option  value="cu mtr" >cu mtr</option>
+              <option  value="gm" >gm</option>
+              <option  value="kg" >kg</option>
+              <option  value="ltr" >ltr</option>
+              <option  value="metric ton" >metric ton</option>
+              <option  value="ml" >ml</option>
+              <option  value="mm" >mm</option>
+              <option  value="mtr" >mtr</option>
+              <option  value="pallets" >pallets</option>
+              <option  value="pieces" >pieces</option>
+              <option  value="pkts" >pkts</option>
+              <option  value="sheets" >sheets</option>
+              <option  value="sq.cm" >sq.cm</option>
+              <option  value="sq.m" >sq.m</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">        
+          <input type="text" placeholder="Rate" value="{{ data["rate"] }}" name="rate" class="form-control" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <input type="text" placeholder="HSN Code" value="{{ data["stock_item_hsn"] }}" name="hsn" class="form-control" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <input type="text" placeholder="Tax Rate" value="{{ data["stock_item_taxrate"] }}" name="taxrate" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <button class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3" id="suggest"></div>
+  </form>
+</div>
+<script>
+  function suggest(data){
+    var xh = new XMLHttpRequest();
+    xh.onreadystatechange = function(){
+      if(xh.status == 200 && xh.readyState == 4)
+      viewresponse(JSON.parse(xh.response))
+    };
+    xh.open("GET","/master/inventory/stock/getgroups/"+data);
+    xh.send();
+  }
+  function viewresponse(data){
+    //console.log(data);
+    innerHTML = "<ul class=\"list-group\">";
+    data.forEach(function(elem){
+      innerHTML += "<a href=\"#\" class=\"list-group-item\" onclick=\"setvalue('"+elem["group_name"]+"')\">"+elem["group_name"]+"</a>"
+    });
+    innerHTML += "</ul>"
+    document.getElementById('suggest').innerHTML = innerHTML
+  }
+  function setvalue(data){
+    document.getElementById('under_group').value = data;
+    document.getElementById('suggest').innerHTML = "";
+  }
+
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block title %}Stock Group{% endblock %}
+{% block main %}
+<form class="form" action="" method="post">
+
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="row">
+        <div class="alert alert-success col-sm-3">Stock Group Item</div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          {% if row %}
+          <input type="text" name="group_name" class="form-control" placeholder="Enter Stock Group Name" value="{{ row["group_name"] }}" required autocomplete="off">
+          <br><input type="text" name="hsn" class="form-control" placeholder="Enter 8 digit HSN Code" value="{{ row["hsn"] }}" required>
+          <br><input type="text" name="taxrate" class="form-control" placeholder="TaxRate [without %]" value="{{ row["taxrate"]}}" required>
+          <div class="form-group">
+            <select class="form-control" name="uom" required>
+                <option  value="{{row["uom"]}}">{{row["uom"]}}</option>
+                <option  value="boxes" >boxes</option>
+                <option  value="cm" >cm</option>
+                <option  value="crates" >crates</option>
+                <option  value="cu mtr" >cu mtr</option>
+                <option  value="gm" >gm</option>
+                <option  value="kg" >kg</option>
+                <option  value="ltr" >ltr</option>
+                <option  value="metric ton" >metric ton</option>
+                <option  value="ml" >ml</option>
+                <option  value="mm" >mm</option>
+                <option  value="mtr" >mtr</option>
+                <option  value="pallets" >pallets</option>
+                <option  value="pieces" >pieces</option>
+                <option  value="pkts" >pkts</option>
+                <option  value="sheets" >sheets</option>
+                <option  value="sq.cm" >sq.cm</option>
+                <option  value="sq.m" >sq.m</option>
+            </select>
+          </div>
+          {% else %}
+          <input type="text" name="group_name" class="form-control" placeholder="Enter Stock Group Name" value="" required><br>
+          <input type="text" name="hsn" class="form-control" placeholder="Enter 8 digit HSN Code" value="" required><br>
+          <input type="number" name="taxrate" class="form-control" placeholder="TaxRate" value="" required><br>
+          <div class="form-group">
+            <select class="form-control" name="uom" required>
+                <option  value="">Select Unit of Measure</option>
+                <option  value="boxes" >boxes</option>
+                <option  value="cm" >cm</option>
+                <option  value="crates" >crates</option>
+                <option  value="cu mtr" >cu mtr</option>
+                <option  value="gm" >gm</option>
+                <option  value="kg" >kg</option>
+                <option  value="ltr" >ltr</option>
+                <option  value="metric ton" >metric ton</option>
+                <option  value="ml" >ml</option>
+                <option  value="mm" >mm</option>
+                <option  value="mtr" >mtr</option>
+                <option  value="pallets" >pallets</option>
+                <option  value="pieces" >pieces</option>
+                <option  value="pkts" >pkts</option>
+                <option  value="sheets" >sheets</option>
+                <option  value="sq.cm" >sq.cm</option>
+                <option  value="sq.m" >sq.m</option>
+            </select>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+      <div class="row">
+        <button class="btn btn-success" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
+
+</form>
+{% endblock %}
